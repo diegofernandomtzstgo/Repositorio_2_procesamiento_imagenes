@@ -147,6 +147,122 @@ var MathImg = /** @class */ (function () {
         }
         return sal;
     };
+    MathImg.toHorizontalTricolor = function (img) {
+        // Variable que guarda el arreglo 3D de la imagen de color
+        var arrImage = img.getArrayImg();
+        // Variable donde guardamos la salida
+        var sal = this.initArray(img.getWidth(), img.getHeight());
+        //Define los puntos de inicio y de final para poder dividir en tres partes
+        var inicio = 0, termino = img.getHeight() / 3;
+        //parte superior
+        // recorre  la 1ra tercera parte  de la imagen.
+        for (var i = inicio; i < termino; i++) {
+            for (var j = 0; j < img.getWidth(); j++) {
+                sal[0][i][j] = 0;
+                sal[1][i][j] = arrImage[1][i][j];
+                sal[2][i][j] = 0;
+            }
+        }
+        //parte de inmedio
+        // Actualiza los puntos de inicio y final para la segunda tercera parte de la imagen.
+        inicio = termino;
+        termino = 2 * img.getHeight() / 3;
+        // Recorre la 2da tercera paarte de la imagen
+        for (var i = inicio; i < termino; i++) {
+            for (var j = 0; j < img.getWidth(); j++) {
+                sal[0][i][j] = arrImage[0][i][j];
+                sal[1][i][j] = arrImage[0][i][j];
+                sal[2][i][j] = arrImage[0][i][j];
+            }
+        }
+        //parte de abajo
+        //// Actualiza los puntos de inicio y final para la  tercera parte de la imagen
+        inicio = termino;
+        termino = img.getHeight();
+        //recorre la ultima parte de la imagen
+        for (var i = inicio; i < termino; i++) {
+            for (var j = 0; j < img.getWidth(); j++) {
+                sal[0][i][j] = arrImage[0][i][j];
+                sal[1][i][j] = 0;
+                sal[2][i][j] = 0;
+            }
+        }
+        return sal;
+    };
+    MathImg.toGradualTricolor = function (img) {
+        //variable que guarda el arreglo 3d de la imagen de color
+        var arrImage = img.getArrayImg();
+        //variable donde guardamos la salida
+        var sal = this.initArray(img.getWidth(), img.getHeight());
+        var inicio = 0, termino = Math.round(img.getWidth() / 3) - 25;
+        var peso = 1;
+        for (var i = 0; i < img.getHeight(); i++) {
+            for (var j = inicio; j < termino; j++) {
+                sal[0][i][j] = 0;
+                sal[1][i][j] = arrImage[1][i][j];
+                sal[2][i][j] = 0;
+            }
+        }
+        console.log(inicio, termino);
+        inicio = termino;
+        termino += 50;
+        for (var i = 0; i < img.getHeight(); i++) {
+            for (var j = inicio; j < termino; j++) {
+                sal[0][i][j] = Math.round(0 + arrImage[0][i][j] * (1 - peso));
+                sal[1][i][j] = Math.round(arrImage[1][i][j] * peso + arrImage[0][i][j] * (1 - peso));
+                sal[2][i][j] = Math.round(0 + arrImage[0][i][j] * (1 - peso));
+                peso -= 0.02;
+            }
+            peso = 1;
+        }
+        console.log(inicio, termino);
+        inicio = termino;
+        termino = Math.round(2 * img.getWidth() / 3) - 25;
+        for (var i = 0; i < img.getHeight(); i++) {
+            for (var j = inicio; j < termino; j++) {
+                sal[0][i][j] = arrImage[0][i][j];
+                sal[1][i][j] = arrImage[0][i][j];
+                sal[2][i][j] = arrImage[0][i][j];
+            }
+        }
+        console.log(inicio, termino);
+        inicio = termino;
+        termino += 50;
+        peso = 1;
+        for (var i = 0; i < img.getHeight(); i++) {
+            for (var j = inicio; j < termino; j++) {
+                sal[0][i][j] = Math.round(arrImage[0][i][j] * (peso) + arrImage[0][i][j] * (1 - peso));
+                sal[1][i][j] = Math.round(arrImage[0][i][j] * (peso) + 0);
+                sal[2][i][j] = Math.round(arrImage[0][i][j] * (peso) + 0);
+                peso -= 0.02;
+            }
+            peso = 1;
+        }
+        inicio = termino;
+        termino = img.getWidth();
+        for (var i = 0; i < img.getHeight(); i++) {
+            for (var j = inicio; j < termino; j++) {
+                sal[0][i][j] = arrImage[0][i][j];
+                sal[1][i][j] = 0;
+                sal[2][i][j] = 0;
+            }
+        }
+        return sal;
+    };
+    MathImg.toMartianEffect = function (img) {
+        //variable que guarda el arreglo 3d de la imagen de color
+        var arrImage = img.getArrayImg();
+        //variable donde guardamos la salida
+        var sal = this.initArray(img.getWidth(), img.getHeight());
+        for (var i = 0; i < img.getHeight(); i++) {
+            for (var j = 0; j < img.getWidth(); j++) {
+                sal[0][i][j] = arrImage[0][i][j];
+                sal[1][i][j] = arrImage[1][i][j] * 0.5;
+                sal[2][i][j] = arrImage[2][i][j] * 0.5;
+            }
+        }
+        return sal;
+    };
     MathImg.correctionGamma = function (img, factores) {
         //variable que guarda el arreglo 3d de la imagen de color
         var arrImage = img.getArrayImg();
